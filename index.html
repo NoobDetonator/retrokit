@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroKit — design system retrô modernizado</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="rk-container">
+    <header class="rk-hero">
+      <h1>RetroKit</h1>
+      <p>Um design system inspirado no Windows 95 &amp; XP — com a essência, sem a poeira.</p>
+    </header>
+
+    <!-- Janela + botões -->
+    <div class="rk-section-title">Janela &amp; Botões</div>
+    <div class="rk-window">
+      <div class="rk-titlebar">
+        <span class="rk-dot"></span>
+        <span class="rk-title">Bem-vindo.exe</span>
+        <div class="rk-window-controls">
+          <button class="rk-ctl" aria-label="Minimizar">_</button>
+          <button class="rk-ctl" aria-label="Maximizar">▢</button>
+          <button class="rk-ctl rk-close" aria-label="Fechar">✕</button>
+        </div>
+      </div>
+      <div class="rk-window-body">
+        <p>Componentes reutilizáveis com tokens de cor, tipografia e sombra. <span class="rk-badge">v0.1</span></p>
+        <div class="rk-row">
+          <button class="rk-btn rk-primary">OK</button>
+          <button class="rk-btn">Cancelar</button>
+          <button class="rk-btn rk-danger">Excluir</button>
+          <button class="rk-btn" disabled>Desativado</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="rk-section-title">Formulário</div>
+    <div class="rk-grid">
+      <div class="rk-window">
+        <div class="rk-titlebar"><span class="rk-title">Configurações</span></div>
+        <div class="rk-window-body">
+          <div class="rk-field">
+            <label for="nome">Nome de usuário</label>
+            <input class="rk-input" id="nome" placeholder="digite aqui..." />
+          </div>
+          <div class="rk-field">
+            <label for="tema">Tema</label>
+            <select class="rk-select" id="tema">
+              <option>Clássico Azul</option>
+              <option>Verde-água</option>
+              <option>Âmbar</option>
+            </select>
+          </div>
+          <label class="rk-check"><input type="checkbox" checked /> Lembrar de mim</label>
+          <label class="rk-check"><input type="radio" name="r" checked /> Modo janela</label>
+          <label class="rk-check"><input type="radio" name="r" /> Tela cheia</label>
+        </div>
+      </div>
+
+      <div class="rk-window">
+        <div class="rk-titlebar"><span class="rk-title">Copiando arquivos...</span></div>
+        <div class="rk-window-body">
+          <p>Instalando componentes...</p>
+          <div class="rk-progress"><div class="rk-progress-bar"></div></div>
+          <div class="rk-row" style="margin-top:16px">
+            <button class="rk-btn rk-primary">Continuar</button>
+            <button class="rk-btn">Pausar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Taskbar -->
+  <div class="rk-taskbar">
+    <button class="rk-start"><span class="rk-logo"></span> Iniciar</button>
+    <button class="rk-btn">RetroKit</button>
+    <span class="rk-clock" id="clock">--:--</span>
+  </div>
+
+  <script>
+    const c = document.getElementById('clock');
+    const tick = () => c.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    tick(); setInterval(tick, 10000);
+  </script>
+</body>
+</html>

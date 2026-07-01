@@ -1,0 +1,196 @@
+/* ============================================================
+   RetroKit — design system inspirado em Windows 95 / XP,
+   modernizado. Tokens primeiro, componentes depois.
+   ============================================================ */
+
+:root {
+  /* --- Cores --- */
+  --rk-blue: #2f6fd8;          /* azul XP modernizado */
+  --rk-blue-dark: #1c4ea8;
+  --rk-blue-light: #6ea3f0;
+  --rk-teal: #3aa8a0;          /* verde-água XP desktop */
+  --rk-surface: #f4f4f2;       /* cinza janela, menos saturado que o 95 */
+  --rk-surface-2: #ffffff;
+  --rk-border: #c9c9c4;
+  --rk-border-dark: #8f8f8a;
+  --rk-text: #1a1a1a;
+  --rk-text-dim: #5a5a56;
+  --rk-accent: #f0a020;        /* âmbar para destaques */
+  --rk-danger: #d84a3a;
+  --rk-focus: #ffcf4d;
+
+  /* --- Tipografia --- */
+  --rk-font: "Segoe UI", Tahoma, "Trebuchet MS", system-ui, sans-serif;
+  --rk-font-mono: "Consolas", "Courier New", monospace;
+
+  /* --- Espaçamento --- */
+  --rk-gap: 8px;
+  --rk-pad: 12px;
+  --rk-radius: 6px;            /* cantos suaves = toque moderno */
+  --rk-radius-sm: 4px;
+
+  /* --- Sombras (camadas suaves no lugar de bevel duro) --- */
+  --rk-shadow: 0 2px 6px rgba(0, 0, 0, .12), 0 8px 24px rgba(0, 0, 0, .12);
+  --rk-shadow-sm: 0 1px 2px rgba(0, 0, 0, .18);
+  --rk-inset: inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--rk-font);
+  color: var(--rk-text);
+  /* wallpaper "bliss" moderno em degradê */
+  background:
+    radial-gradient(120% 80% at 50% -10%, #9fd0ff 0%, transparent 60%),
+    linear-gradient(180deg, #4a90d9 0%, #3aa8a0 100%);
+  padding: 40px 20px 80px;
+}
+
+.rk-container { max-width: 920px; margin: 0 auto; }
+
+.rk-hero { text-align: center; color: #fff; margin-bottom: 32px; }
+.rk-hero h1 { font-size: 40px; margin: 0 0 6px; text-shadow: 0 2px 8px rgba(0,0,0,.35); }
+.rk-hero p  { margin: 0; opacity: .95; }
+
+.rk-section-title {
+  color: #fff; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 1px; margin: 28px 4px 10px; opacity: .9;
+}
+
+/* ============================================================
+   Componente: Janela (Window)
+   ============================================================ */
+.rk-window {
+  background: var(--rk-surface);
+  border: 1px solid var(--rk-border-dark);
+  border-radius: var(--rk-radius);
+  box-shadow: var(--rk-shadow);
+  overflow: hidden;
+}
+
+.rk-titlebar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, var(--rk-blue-light) 0%, var(--rk-blue) 45%, var(--rk-blue-dark) 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: var(--rk-inset);
+}
+.rk-titlebar .rk-title { flex: 1; font-size: 14px; }
+.rk-titlebar .rk-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.85); }
+
+.rk-window-controls { display: flex; gap: 6px; }
+.rk-ctl {
+  width: 22px; height: 20px; border: none; border-radius: var(--rk-radius-sm);
+  background: rgba(255,255,255,.22); color: #fff; cursor: pointer;
+  font-size: 12px; line-height: 1; display: grid; place-items: center;
+  transition: background .12s ease;
+}
+.rk-ctl:hover { background: rgba(255,255,255,.4); }
+.rk-ctl.rk-close:hover { background: var(--rk-danger); }
+
+.rk-window-body { padding: var(--rk-pad); }
+
+/* ============================================================
+   Componente: Botões
+   ============================================================ */
+.rk-btn {
+  font-family: var(--rk-font); font-size: 13px;
+  padding: 7px 16px; border-radius: var(--rk-radius-sm);
+  border: 1px solid var(--rk-border-dark);
+  background: linear-gradient(180deg, #ffffff 0%, #e7e7e3 100%);
+  color: var(--rk-text); cursor: pointer;
+  box-shadow: var(--rk-shadow-sm), var(--rk-inset);
+  transition: transform .06s ease, filter .12s ease;
+}
+.rk-btn:hover { filter: brightness(1.04); }
+.rk-btn:active { transform: translateY(1px); box-shadow: var(--rk-shadow-sm); }
+.rk-btn:focus-visible { outline: 2px solid var(--rk-focus); outline-offset: 1px; }
+
+.rk-btn.rk-primary {
+  background: linear-gradient(180deg, var(--rk-blue-light) 0%, var(--rk-blue) 100%);
+  border-color: var(--rk-blue-dark); color: #fff;
+}
+.rk-btn.rk-danger {
+  background: linear-gradient(180deg, #f07767 0%, var(--rk-danger) 100%);
+  border-color: #a8382b; color: #fff;
+}
+.rk-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.3); }
+
+/* ============================================================
+   Componente: Campos (input / select)
+   ============================================================ */
+.rk-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: var(--rk-gap); }
+.rk-field label { font-size: 12px; color: var(--rk-text-dim); }
+
+.rk-input, .rk-select {
+  font-family: var(--rk-font); font-size: 13px;
+  padding: 7px 10px; border-radius: var(--rk-radius-sm);
+  border: 1px solid var(--rk-border-dark);
+  background: var(--rk-surface-2); color: var(--rk-text);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+}
+.rk-input:focus, .rk-select:focus {
+  outline: none; border-color: var(--rk-blue);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.08), 0 0 0 3px rgba(47,111,216,.25);
+}
+
+/* ============================================================
+   Componente: Check / Radio
+   ============================================================ */
+.rk-check { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 6px; cursor: pointer; }
+.rk-check input { width: 16px; height: 16px; accent-color: var(--rk-blue); }
+
+/* ============================================================
+   Componente: Barra de progresso
+   ============================================================ */
+.rk-progress {
+  height: 20px; border-radius: 999px; overflow: hidden;
+  background: var(--rk-surface-2); border: 1px solid var(--rk-border-dark);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.12);
+}
+.rk-progress-bar {
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--rk-blue) 0 14px, var(--rk-blue-light) 14px 22px);
+  background-size: 200% 100%;
+  animation: rk-scroll 1.2s linear infinite;
+}
+@keyframes rk-scroll { from { background-position: 0 0; } to { background-position: 44px 0; } }
+
+/* ============================================================
+   Componente: Badge / tag
+   ============================================================ */
+.rk-badge {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--rk-accent); color: #3a2600;
+}
+
+/* ============================================================
+   Layout auxiliar do showcase
+   ============================================================ */
+.rk-row { display: flex; flex-wrap: wrap; gap: var(--rk-gap); align-items: center; }
+.rk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .rk-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   Componente: Taskbar
+   ============================================================ */
+.rk-taskbar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 44px;
+  display: flex; align-items: center; gap: 10px; padding: 0 8px;
+  background: linear-gradient(180deg, var(--rk-blue) 0%, var(--rk-blue-dark) 100%);
+  box-shadow: 0 -2px 10px rgba(0,0,0,.25);
+}
+.rk-start {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border: none; border-radius: 8px;
+  background: linear-gradient(180deg, #5cb85c 0%, #2e7d32 100%);
+  color: #fff; font-weight: 700; font-style: italic; cursor: pointer;
+  box-shadow: var(--rk-inset), var(--rk-shadow-sm);
+}
+.rk-start .rk-logo { width: 14px; height: 14px; border-radius: 3px; background: #fff; }
+.rk-clock { margin-left: auto; color: #fff; font-size: 13px; padding-right: 8px; }
