@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RetroKit — design system retrô modernizado</title>
+  <title>RetroKit Aero — design system de vidro</title>
+  <meta name="description" content="RetroKit Aero: design system inspirado na era Windows Vista/Aero — vidro fosco, brilho aqua e natureza-tech." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- assinatura: bolhas ambiente -->
+  <div class="aero-bubbles" aria-hidden="true" id="bubbles"></div>
+
   <div class="rk-container">
     <header class="rk-hero">
-      <h1>RetroKit</h1>
-      <p>Um design system inspirado no Windows 95 &amp; XP — com a essência, sem a poeira.</p>
+      <h1>RetroKit Aero</h1>
+      <p>A linhagem seguiu em frente: 95 → XP → <strong>Aero</strong>. Vidro fosco de verdade, brilho aqua e um horizonte que respira.</p>
     </header>
 
-    <!-- Janela + botões -->
-    <div class="rk-section-title">Janela &amp; Botões</div>
+    <!-- Janela + botões glossy -->
+    <div class="rk-section-title">Vidro &amp; Botões aqua</div>
     <div class="rk-window">
       <div class="rk-titlebar">
         <span class="rk-dot"></span>
@@ -26,9 +30,10 @@
         </div>
       </div>
       <div class="rk-window-body">
-        <p>Componentes reutilizáveis com tokens de cor, tipografia e sombra. <span class="rk-badge">v0.1</span></p>
+        <p>Superfícies translúcidas com <code>backdrop-filter</code>, reflexo diagonal e profundidade em camadas. <span class="rk-badge">v0.2</span></p>
         <div class="rk-row">
           <button class="rk-btn rk-primary">OK</button>
+          <button class="rk-btn rk-grass">Aplicar</button>
           <button class="rk-btn">Cancelar</button>
           <button class="rk-btn rk-danger">Excluir</button>
           <button class="rk-btn" disabled>Desativado</button>
@@ -36,36 +41,35 @@
       </div>
     </div>
 
-    <!-- Formulário -->
-    <div class="rk-section-title">Formulário</div>
+    <!-- Formulário + progresso -->
+    <div class="rk-section-title">Formulário &amp; feedback</div>
     <div class="rk-grid">
       <div class="rk-window">
-        <div class="rk-titlebar"><span class="rk-title">Configurações</span></div>
+        <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Preferências</span></div>
         <div class="rk-window-body">
           <div class="rk-field">
             <label for="nome">Nome de usuário</label>
             <input class="rk-input" id="nome" placeholder="digite aqui..." />
           </div>
           <div class="rk-field">
-            <label for="tema">Tema</label>
+            <label for="tema">Papel de parede</label>
             <select class="rk-select" id="tema">
-              <option>Clássico Azul</option>
-              <option>Verde-água</option>
-              <option>Âmbar</option>
+              <option>Horizonte Aqua</option>
+              <option>Céu &amp; Grama</option>
+              <option>Bolhas ao pôr do sol</option>
             </select>
           </div>
           <label class="rk-check"><input type="checkbox" checked /> Lembrar de mim</label>
-          <label class="rk-check"><input type="radio" name="r" checked /> Modo janela</label>
-          <label class="rk-check"><input type="radio" name="r" /> Tela cheia</label>
+          <label class="rk-toggle"><input type="checkbox" checked /><span class="track"></span> Bolhas flutuantes</label>
         </div>
       </div>
 
       <div class="rk-window">
-        <div class="rk-titlebar"><span class="rk-title">Copiando arquivos...</span></div>
+        <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Copiando arquivos...</span></div>
         <div class="rk-window-body">
-          <p>Instalando componentes...</p>
+          <p>Instalando componentes de vidro...</p>
           <div class="rk-progress"><div class="rk-progress-bar"></div></div>
-          <div class="rk-row" style="margin-top:16px">
+          <div class="rk-row" style="margin-top:18px">
             <button class="rk-btn rk-primary">Continuar</button>
             <button class="rk-btn">Pausar</button>
           </div>
@@ -74,17 +78,32 @@
     </div>
   </div>
 
-  <!-- Taskbar -->
+  <!-- Dock de vidro -->
   <div class="rk-taskbar">
-    <button class="rk-start"><span class="rk-logo"></span> Iniciar</button>
+    <button class="rk-start"><span class="rk-orb"></span> Iniciar</button>
     <button class="rk-btn">RetroKit</button>
     <span class="rk-clock" id="clock">--:--</span>
   </div>
 
   <script>
+    // relógio
     const c = document.getElementById('clock');
     const tick = () => c.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     tick(); setInterval(tick, 10000);
+
+    // bolhas ambiente — geradas só se o usuário não pediu menos movimento
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const box = document.getElementById('bubbles');
+      for (let i = 0; i < 14; i++) {
+        const b = document.createElement('span');
+        const size = 8 + Math.random() * 46;
+        b.style.width = b.style.height = size + 'px';
+        b.style.left = Math.random() * 100 + '%';
+        b.style.animationDuration = (9 + Math.random() * 12) + 's';
+        b.style.animationDelay = (-Math.random() * 15) + 's';
+        box.appendChild(b);
+      }
+    }
   </script>
 </body>
 </html>

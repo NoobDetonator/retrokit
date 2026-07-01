@@ -1,38 +1,40 @@
 /* ============================================================
-   RetroKit — design system inspirado em Windows 95 / XP,
-   modernizado. Tokens primeiro, componentes depois.
+   RetroKit AERO — v0.2
+   A evolução da linhagem: Win95 → XP → Vista/Aero glass.
+   Estilo: Frutiger Aero (vidro fosco, brilho aqua, natureza-tech).
+   Método: frontend-design (tokens nomeados + 1 assinatura) +
+   glassmorphism/typography vindos do ui-ux-pro-max.
    ============================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700&display=swap');
+
 :root {
-  /* --- Cores --- */
-  --rk-blue: #2f6fd8;          /* azul XP modernizado */
-  --rk-blue-dark: #1c4ea8;
-  --rk-blue-light: #6ea3f0;
-  --rk-teal: #3aa8a0;          /* verde-água XP desktop */
-  --rk-surface: #f4f4f2;       /* cinza janela, menos saturado que o 95 */
-  --rk-surface-2: #ffffff;
-  --rk-border: #c9c9c4;
-  --rk-border-dark: #8f8f8a;
-  --rk-text: #1a1a1a;
-  --rk-text-dim: #5a5a56;
-  --rk-accent: #f0a020;        /* âmbar para destaques */
-  --rk-danger: #d84a3a;
-  --rk-focus: #ffcf4d;
+  /* --- Paleta (6 hex nomeados) --- */
+  --sky:    #7ec8ff;   /* céu */
+  --deep:   #1b6fc4;   /* azul profundo, herança XP */
+  --aqua:   #23c3c0;   /* água/teal */
+  --grass:  #7ed957;   /* verde Frutiger, natureza-tech */
+  --ink:    #0c2b46;   /* texto azul-tinta sobre vidro */
+  --amber:  #ffb020;   /* destaque quente pontual */
+
+  /* --- Vidro (a assinatura) --- */
+  --glass:      rgba(255, 255, 255, .58);
+  --glass-strong: rgba(255, 255, 255, .74);
+  --glass-line: rgba(255, 255, 255, .85);   /* borda-luz superior */
+  --glass-edge: rgba(13, 43, 70, .18);       /* borda inferior/sombra */
 
   /* --- Tipografia --- */
-  --rk-font: "Segoe UI", Tahoma, "Trebuchet MS", system-ui, sans-serif;
-  --rk-font-mono: "Consolas", "Courier New", monospace;
+  --font-display: "Varela Round", system-ui, sans-serif;
+  --font-body: "Nunito Sans", system-ui, sans-serif;
 
-  /* --- Espaçamento --- */
-  --rk-gap: 8px;
-  --rk-pad: 12px;
-  --rk-radius: 6px;            /* cantos suaves = toque moderno */
-  --rk-radius-sm: 4px;
+  /* --- Escala / forma --- */
+  --pad: 14px;
+  --radius: 16px;      /* bolha: cantos generosos = Aero */
+  --radius-sm: 11px;
 
-  /* --- Sombras (camadas suaves no lugar de bevel duro) --- */
-  --rk-shadow: 0 2px 6px rgba(0, 0, 0, .12), 0 8px 24px rgba(0, 0, 0, .12);
-  --rk-shadow-sm: 0 1px 2px rgba(0, 0, 0, .18);
-  --rk-inset: inset 0 1px 0 rgba(255, 255, 255, .7);
+  /* --- Sombras em camadas (profundidade de vidro) --- */
+  --lift: 0 1px 0 var(--glass-line) inset, 0 10px 30px rgba(9, 40, 70, .28), 0 2px 6px rgba(9, 40, 70, .18);
+  --lift-sm: 0 1px 0 rgba(255,255,255,.7) inset, 0 3px 10px rgba(9, 40, 70, .22);
 }
 
 * { box-sizing: border-box; }
@@ -40,157 +42,252 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: var(--rk-font);
-  color: var(--rk-text);
-  /* wallpaper "bliss" moderno em degradê */
+  font-family: var(--font-body);
+  color: var(--ink);
+  overflow-x: hidden;
+  padding: 48px 20px 96px;
+  /* Horizonte Frutiger: céu → água → grama */
   background:
-    radial-gradient(120% 80% at 50% -10%, #9fd0ff 0%, transparent 60%),
-    linear-gradient(180deg, #4a90d9 0%, #3aa8a0 100%);
-  padding: 40px 20px 80px;
+    radial-gradient(130% 115% at 50% -18%, #d6f1ff 0%, #8fd2ff 26%, #37a6e0 56%, rgba(55,166,224,0) 60%),
+    linear-gradient(180deg, #6fc0f5 0%, #33aad4 42%, #35c39c 74%, #86e06a 100%);
+  background-attachment: fixed;
 }
 
-.rk-container { max-width: 920px; margin: 0 auto; }
+/* --- Bolhas ambiente (atrás de tudo) --- */
+.aero-bubbles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.aero-bubbles span {
+  position: absolute; bottom: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9), rgba(255,255,255,.28) 42%, rgba(255,255,255,0) 70%);
+  box-shadow: 0 0 12px rgba(255,255,255,.4);
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { transform: translateY(0) translateX(0) scale(.8); opacity: 0; }
+  15%  { opacity: .9; }
+  100% { transform: translateY(-118vh) translateX(30px) scale(1.15); opacity: 0; }
+}
 
-.rk-hero { text-align: center; color: #fff; margin-bottom: 32px; }
-.rk-hero h1 { font-size: 40px; margin: 0 0 6px; text-shadow: 0 2px 8px rgba(0,0,0,.35); }
-.rk-hero p  { margin: 0; opacity: .95; }
+.rk-container { position: relative; z-index: 1; max-width: 940px; margin: 0 auto; }
+
+/* --- Hero --- */
+.rk-hero { text-align: center; color: #fff; margin-bottom: 34px; }
+.rk-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 7vw, 58px); margin: 0 0 8px; letter-spacing: .5px;
+  text-shadow: 0 2px 0 rgba(255,255,255,.25), 0 4px 18px rgba(6,32,58,.5);
+}
+.rk-hero p { margin: 0 auto; max-width: 46ch; font-size: 17px; opacity: .96; text-shadow: 0 1px 6px rgba(6,32,58,.4); }
 
 .rk-section-title {
-  color: #fff; font-size: 13px; text-transform: uppercase;
-  letter-spacing: 1px; margin: 28px 4px 10px; opacity: .9;
+  color: #fff; font-family: var(--font-display);
+  font-size: 14px; letter-spacing: .6px; margin: 30px 6px 12px;
+  text-shadow: 0 1px 6px rgba(6,32,58,.45);
 }
 
 /* ============================================================
-   Componente: Janela (Window)
+   Assinatura: superfície de VIDRO AERO
+   Vidro fosco real + faixa de reflexo diagonal no topo.
    ============================================================ */
 .rk-window {
-  background: var(--rk-surface);
-  border: 1px solid var(--rk-border-dark);
-  border-radius: var(--rk-radius);
-  box-shadow: var(--rk-shadow);
+  position: relative;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--glass-line);
+  border-bottom-color: var(--glass-edge);
+  border-radius: var(--radius);
+  box-shadow: var(--lift);
   overflow: hidden;
+  animation: materialize .5s cubic-bezier(.2, .8, .2, 1) both;
+}
+/* reflexo Aero: brilho que corta o topo na diagonal */
+.rk-window::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 52%;
+  background: linear-gradient(158deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 42%, rgba(255,255,255,0) 60%);
+  pointer-events: none;
+}
+@keyframes materialize {
+  from { opacity: 0; transform: translateY(12px) scale(.985); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: none; }
 }
 
 .rk-titlebar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 10px;
-  background: linear-gradient(180deg, var(--rk-blue-light) 0%, var(--rk-blue) 45%, var(--rk-blue-dark) 100%);
-  color: #fff;
-  font-weight: 600;
-  box-shadow: var(--rk-inset);
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 9px; padding: 11px 13px;
+  color: #fff; font-family: var(--font-display); font-size: 15px;
+  background: linear-gradient(180deg, rgba(126,200,255,.95) 0%, rgba(27,111,196,.95) 100%);
+  border-bottom: 1px solid rgba(255,255,255,.4);
+  text-shadow: 0 1px 2px rgba(6,32,58,.5);
 }
-.rk-titlebar .rk-title { flex: 1; font-size: 14px; }
-.rk-titlebar .rk-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.85); }
+.rk-titlebar .rk-title { flex: 1; }
+.rk-titlebar .rk-dot { width: 11px; height: 11px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, var(--grass) 70%); box-shadow: 0 0 6px rgba(255,255,255,.7); }
 
-.rk-window-controls { display: flex; gap: 6px; }
+.rk-window-controls { display: flex; gap: 7px; }
 .rk-ctl {
-  width: 22px; height: 20px; border: none; border-radius: var(--rk-radius-sm);
+  width: 26px; height: 22px; border: 1px solid rgba(255,255,255,.5); border-radius: 8px;
   background: rgba(255,255,255,.22); color: #fff; cursor: pointer;
-  font-size: 12px; line-height: 1; display: grid; place-items: center;
-  transition: background .12s ease;
+  font-size: 12px; display: grid; place-items: center; transition: background .15s ease, transform .06s ease;
 }
-.rk-ctl:hover { background: rgba(255,255,255,.4); }
-.rk-ctl.rk-close:hover { background: var(--rk-danger); }
+.rk-ctl:hover { background: rgba(255,255,255,.42); }
+.rk-ctl:active { transform: translateY(1px); }
+.rk-ctl.rk-close:hover { background: #ff6a5a; border-color: #ff6a5a; }
 
-.rk-window-body { padding: var(--rk-pad); }
+.rk-window-body { position: relative; z-index: 1; padding: var(--pad); }
+.rk-window-body p { margin: 0 0 12px; line-height: 1.6; }
 
 /* ============================================================
-   Componente: Botões
+   Assinatura 2: botão AQUA glossy (Web 2.0)
+   Gloss branco na metade de cima + varredura de brilho no hover.
    ============================================================ */
 .rk-btn {
-  font-family: var(--rk-font); font-size: 13px;
-  padding: 7px 16px; border-radius: var(--rk-radius-sm);
-  border: 1px solid var(--rk-border-dark);
-  background: linear-gradient(180deg, #ffffff 0%, #e7e7e3 100%);
-  color: var(--rk-text); cursor: pointer;
-  box-shadow: var(--rk-shadow-sm), var(--rk-inset);
-  transition: transform .06s ease, filter .12s ease;
+  position: relative; overflow: hidden;
+  font-family: var(--font-display); font-size: 14px; color: var(--ink);
+  padding: 9px 20px; min-height: 40px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.7);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.35) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.18) 100%),
+    linear-gradient(180deg, #ffffff 0%, #dce8f2 100%);
+  box-shadow: var(--lift-sm);
+  transition: transform .07s ease, filter .15s ease, box-shadow .15s ease;
 }
-.rk-btn:hover { filter: brightness(1.04); }
-.rk-btn:active { transform: translateY(1px); box-shadow: var(--rk-shadow-sm); }
-.rk-btn:focus-visible { outline: 2px solid var(--rk-focus); outline-offset: 1px; }
+.rk-btn::after { /* varredura de brilho */
+  content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.75), transparent);
+  transform: skewX(-18deg); transition: left .5s ease;
+}
+.rk-btn:hover { filter: brightness(1.05); }
+.rk-btn:hover::after { left: 130%; }
+.rk-btn:active { transform: translateY(1px) scale(.99); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 2px 6px rgba(9,40,70,.22); }
+.rk-btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 
 .rk-btn.rk-primary {
-  background: linear-gradient(180deg, var(--rk-blue-light) 0%, var(--rk-blue) 100%);
-  border-color: var(--rk-blue-dark); color: #fff;
+  color: #fff; border-color: rgba(255,255,255,.55); text-shadow: 0 1px 2px rgba(6,32,58,.5);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.15) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
+    linear-gradient(180deg, var(--sky) 0%, var(--deep) 100%);
+}
+.rk-btn.rk-grass {
+  color: #093a12; border-color: rgba(255,255,255,.6);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.15) 100%),
+    linear-gradient(180deg, #a7ef7e 0%, var(--grass) 100%);
 }
 .rk-btn.rk-danger {
-  background: linear-gradient(180deg, #f07767 0%, var(--rk-danger) 100%);
-  border-color: #a8382b; color: #fff;
+  color: #fff; border-color: rgba(255,255,255,.5); text-shadow: 0 1px 2px rgba(90,10,0,.5);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.7) 0%, rgba(255,255,255,.15) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
+    linear-gradient(180deg, #ff8b7a 0%, #e04a38 100%);
 }
-.rk-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.3); }
+.rk-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); }
+.rk-btn:disabled::after { display: none; }
 
 /* ============================================================
-   Componente: Campos (input / select)
+   Campos
    ============================================================ */
-.rk-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: var(--rk-gap); }
-.rk-field label { font-size: 12px; color: var(--rk-text-dim); }
+.rk-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.rk-field label { font-size: 13px; font-weight: 600; color: var(--ink); }
 
 .rk-input, .rk-select {
-  font-family: var(--rk-font); font-size: 13px;
-  padding: 7px 10px; border-radius: var(--rk-radius-sm);
-  border: 1px solid var(--rk-border-dark);
-  background: var(--rk-surface-2); color: var(--rk-text);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+  font-family: var(--font-body); font-size: 15px; min-height: 42px;
+  padding: 9px 13px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,.8); border-top-color: var(--glass-edge);
+  background: rgba(255,255,255,.72); color: var(--ink);
+  box-shadow: inset 0 2px 4px rgba(9,40,70,.12);
 }
+.rk-input::placeholder { color: #5a7488; }
 .rk-input:focus, .rk-select:focus {
-  outline: none; border-color: var(--rk-blue);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.08), 0 0 0 3px rgba(47,111,216,.25);
+  outline: none; border-color: var(--aqua);
+  box-shadow: inset 0 2px 4px rgba(9,40,70,.12), 0 0 0 4px rgba(35,195,192,.3);
 }
 
 /* ============================================================
-   Componente: Check / Radio
+   Check / Radio / Toggle
    ============================================================ */
-.rk-check { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 6px; cursor: pointer; }
-.rk-check input { width: 16px; height: 16px; accent-color: var(--rk-blue); }
+.rk-check { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 9px; cursor: pointer; min-height: 28px; }
+.rk-check input { width: 19px; height: 19px; accent-color: var(--aqua); }
+
+.rk-toggle { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; }
+.rk-toggle input { position: absolute; opacity: 0; }
+.rk-toggle .track {
+  width: 48px; height: 26px; border-radius: 999px; transition: background .2s ease;
+  background: linear-gradient(180deg, #c3d2dd, #9fb2bf); box-shadow: inset 0 2px 4px rgba(9,40,70,.25);
+}
+.rk-toggle .track::before {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #e4eef5); box-shadow: 0 2px 5px rgba(9,40,70,.4);
+  transition: transform .2s cubic-bezier(.3,1.4,.5,1);
+}
+.rk-toggle input:checked + .track { background: linear-gradient(180deg, #6fe0d0, var(--aqua)); }
+.rk-toggle input:checked + .track::before { transform: translateX(22px); }
+.rk-toggle input:focus-visible + .track { outline: 3px solid var(--amber); outline-offset: 2px; }
 
 /* ============================================================
-   Componente: Barra de progresso
+   Progresso (líquido)
    ============================================================ */
 .rk-progress {
-  height: 20px; border-radius: 999px; overflow: hidden;
-  background: var(--rk-surface-2); border: 1px solid var(--rk-border-dark);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.12);
+  height: 24px; border-radius: 999px; overflow: hidden; padding: 3px;
+  background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8);
+  box-shadow: inset 0 2px 5px rgba(9,40,70,.2);
 }
 .rk-progress-bar {
-  height: 100%;
-  background: repeating-linear-gradient(90deg, var(--rk-blue) 0 14px, var(--rk-blue-light) 14px 22px);
-  background-size: 200% 100%;
-  animation: rk-scroll 1.2s linear infinite;
+  height: 100%; border-radius: 999px; width: 66%;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,0) 55%),
+    linear-gradient(90deg, var(--aqua), var(--sky));
+  box-shadow: 0 0 10px rgba(35,195,192,.6);
+  position: relative; overflow: hidden;
 }
-@keyframes rk-scroll { from { background-position: 0 0; } to { background-position: 44px 0; } }
+.rk-progress-bar::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(115deg, rgba(255,255,255,.35) 0 12px, transparent 12px 26px);
+  animation: flow 1s linear infinite;
+}
+@keyframes flow { to { transform: translateX(26px); } }
 
-/* ============================================================
-   Componente: Badge / tag
-   ============================================================ */
+/* --- Badge --- */
 .rk-badge {
-  display: inline-block; font-size: 11px; font-weight: 600;
-  padding: 2px 8px; border-radius: 999px;
-  background: var(--rk-accent); color: #3a2600;
+  display: inline-block; font-family: var(--font-display); font-size: 12px;
+  padding: 3px 11px; border-radius: 999px; color: #4a2c00;
+  background: linear-gradient(180deg, #ffd778, var(--amber));
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 2px 5px rgba(120,70,0,.3);
 }
 
-/* ============================================================
-   Layout auxiliar do showcase
-   ============================================================ */
-.rk-row { display: flex; flex-wrap: wrap; gap: var(--rk-gap); align-items: center; }
-.rk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+/* --- Layout auxiliar --- */
+.rk-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.rk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 @media (max-width: 640px) { .rk-grid { grid-template-columns: 1fr; } }
 
 /* ============================================================
-   Componente: Taskbar
+   Dock / Taskbar (vidro)
    ============================================================ */
 .rk-taskbar {
-  position: fixed; left: 0; right: 0; bottom: 0; height: 44px;
-  display: flex; align-items: center; gap: 10px; padding: 0 8px;
-  background: linear-gradient(180deg, var(--rk-blue) 0%, var(--rk-blue-dark) 100%);
-  box-shadow: 0 -2px 10px rgba(0,0,0,.25);
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; z-index: 5;
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  border-radius: 999px; border: 1px solid var(--glass-line);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
+  box-shadow: var(--lift);
 }
 .rk-start {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 16px; border: none; border-radius: 8px;
-  background: linear-gradient(180deg, #5cb85c 0%, #2e7d32 100%);
-  color: #fff; font-weight: 700; font-style: italic; cursor: pointer;
-  box-shadow: var(--rk-inset), var(--rk-shadow-sm);
+  display: flex; align-items: center; gap: 9px; font-family: var(--font-display);
+  padding: 9px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,.6);
+  color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(6,32,58,.5);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,0) 50%),
+    linear-gradient(180deg, #7ee07a, #2e9e4f);
+  box-shadow: var(--lift-sm);
 }
-.rk-start .rk-logo { width: 14px; height: 14px; border-radius: 3px; background: #fff; }
-.rk-clock { margin-left: auto; color: #fff; font-size: 13px; padding-right: 8px; }
+.rk-start .rk-orb { width: 15px; height: 15px; border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fff, #cfeecb 60%, #6cc06a); box-shadow: 0 0 6px rgba(255,255,255,.8); }
+.rk-clock { font-family: var(--font-display); font-size: 14px; color: var(--ink); padding: 0 8px; }
+
+/* ============================================================
+   Acessibilidade: respeita quem pede menos movimento
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .aero-bubbles { display: none; }
+  .rk-window, .rk-progress-bar::after, .rk-btn::after { animation: none !important; transition: none !important; }
+  .rk-btn:hover::after { left: -60%; }
+}
