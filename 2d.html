@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroKit Frost — glassmorphism minimalista</title>
+  <meta name="description" content="RetroKit Frost: a versão clean do sistema. Glassmorphism correto, paleta neutra branco/preto e um único token de marca." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="rk-container">
+    <header class="rk-hero">
+      <h1>RetroKit Frost</h1>
+      <p>A versão clean do sistema. Vidro de verdade — translúcido, com borda-de-luz e sombra difusa — sobre uma base neutra. A cor de marca é um único token: troque <code>--accent</code> e o sistema inteiro acompanha.</p>
+    </header>
+
+    <!-- Vidro + botões -->
+    <span class="rk-eyebrow">01 — Vidro &amp; botões</span>
+    <div class="rk-window">
+      <div class="rk-titlebar">
+        <span class="rk-dot"></span>
+        <span class="rk-title">Bem-vindo</span>
+        <div class="rk-window-controls">
+          <button class="rk-ctl" aria-label="Minimizar"></button>
+          <button class="rk-ctl" aria-label="Maximizar"></button>
+          <button class="rk-ctl rk-close" aria-label="Fechar"></button>
+        </div>
+      </div>
+      <div class="rk-window-body">
+        <p>Baixa opacidade, <code>backdrop-filter</code>, realce interno no topo e sombra suave. Os blobs de cor no fundo aparecem <strong>refratados</strong> através do vidro. <span class="rk-badge">v0.5</span></p>
+        <div class="rk-row">
+          <button class="rk-btn rk-primary">Continuar</button>
+          <button class="rk-btn">Vidro</button>
+          <button class="rk-btn rk-ghost">Fantasma</button>
+          <button class="rk-btn rk-danger">Excluir</button>
+          <button class="rk-btn" disabled>Desativado</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário + feedback -->
+    <span class="rk-eyebrow">02 — Formulário &amp; feedback</span>
+    <div class="rk-grid">
+      <div class="rk-window">
+        <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Preferências</span></div>
+        <div class="rk-window-body">
+          <div class="rk-field">
+            <label for="nome">Nome de usuário</label>
+            <input class="rk-input" id="nome" placeholder="digite aqui..." />
+          </div>
+          <div class="rk-field">
+            <label for="tema">Cor de marca</label>
+            <select class="rk-select" id="tema">
+              <option>Azul (padrão)</option>
+              <option>Neutro / mono</option>
+              <option>Personalizado</option>
+            </select>
+          </div>
+          <label class="rk-check"><input type="checkbox" checked /> Lembrar de mim</label>
+          <label class="rk-toggle"><input type="checkbox" checked /><span class="track"></span> Modo compacto</label>
+        </div>
+      </div>
+
+      <div class="rk-window">
+        <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Instalando</span></div>
+        <div class="rk-window-body">
+          <p>Copiando componentes...</p>
+          <div class="rk-panel">
+            <div class="rk-progress"><div class="rk-progress-bar"></div></div>
+            <div class="rk-row" style="margin-top:16px">
+              <button class="rk-btn rk-primary">Continuar</button>
+              <button class="rk-btn rk-ghost">Pausar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dock -->
+  <div class="rk-taskbar">
+    <button class="rk-start"><span class="rk-orb"></span> Início</button>
+    <a class="rk-btn rk-primary" href="./" style="text-decoration:none;display:inline-flex;align-items:center">Ver em 3D →</a>
+    <span class="rk-clock" id="clock">--:--</span>
+  </div>
+
+  <script>
+    const c = document.getElementById('clock');
+    const tick = () => c.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    tick(); setInterval(tick, 10000);
+  </script>
+</body>
+</html>
