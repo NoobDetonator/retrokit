@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroKit 3D — componentes de vidro reais</title>
+  <meta name="description" content="Componentes do RetroKit em 3D real com Three.js: vidro com refração física (MeshPhysicalMaterial transmission)." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { padding: 0; overflow: hidden; height: 100vh; }
+    #scene { position: fixed; inset: 0; z-index: 0; display: block; }
+    .overlay { position: fixed; z-index: 2; pointer-events: none; }
+    .overlay .rk-window, .overlay a, .overlay .rk-badge { pointer-events: auto; }
+    .top-left { top: 28px; left: 28px; max-width: 340px; }
+    .top-left h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 700; letter-spacing: -1.2px; margin: 0 0 10px; }
+    .top-left p { margin: 0 0 14px; color: var(--ink-dim); line-height: 1.6; }
+    .hint {
+      position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2;
+      font-size: 13px; color: var(--ink-dim); background: var(--glass);
+      -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur));
+      border: 1px solid var(--glass-border); border-radius: 999px; padding: 8px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .backlink { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600;
+      color: var(--accent); text-decoration: none; }
+    .backlink:hover { text-decoration: underline; }
+    #fallback { position: fixed; inset: 0; display: none; place-items: center; text-align: center;
+      color: var(--ink-dim); padding: 40px; z-index: 1; }
+  </style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div class="overlay top-left">
+    <div class="rk-window">
+      <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">RetroKit 3D</span></div>
+      <div class="rk-window-body">
+        <h1>Vidro de verdade</h1>
+        <p>Os mesmos componentes, agora em 3D real. O vidro usa refração física (<code>transmission</code>) — ele dobra a luz e a cor por trás de verdade, não é um blur falso. <span class="rk-badge">webgl</span></p>
+        <a class="backlink" href="index.html">← voltar ao sistema 2D</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint" id="hint">arraste para girar · passe o mouse nos botões</div>
+  <div id="fallback">Seu navegador não suporta WebGL — <a href="index.html">veja a versão 2D</a>.</div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+    import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+    const canvas = document.getElementById('scene');
+    if (!( window.WebGLRenderingContext && canvas.getContext('webgl2') || canvas.getContext('webgl') )) {
+      document.getElementById('fallback').style.display = 'grid';
+      throw new Error('no webgl');
+    }
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const css = getComputedStyle(document.documentElement);
+    const accent = new THREE.Color(css.getPropertyValue('--accent').trim() || '#2b6cd9');
+    const teal = new THREE.Color('#23c3c0');
+    const warm = new THREE.Color('#ff8a5c');
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+
+    const scene = new THREE.Scene();
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(0, 0.2, 8);
+
+    // luz de apoio (o ambiente já ilumina a maior parte)
+    const key = new THREE.DirectionalLight(0xffffff, 1.6);
+    key.position.set(4, 6, 5);
+    scene.add(key);
+
+    // --- objetos coloridos ATRÁS do vidro (para serem refratados) ---
+    const orbGeo = new THREE.IcosahedronGeometry(0.55, 3);
+    const mkOrb = (c, x, y, z) => {
+      const m = new THREE.Mesh(orbGeo, new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.6, roughness: 0.4 }));
+      m.position.set(x, y, z); scene.add(m); return m;
+    };
+    const orbs = [mkOrb(accent, -1.6, 0.9, -2.2), mkOrb(teal, 1.7, -0.8, -2.4), mkOrb(warm, 0.4, 1.4, -3)];
+
+    // --- material de VIDRO (refração física) ---
+    const glass = (tint) => new THREE.MeshPhysicalMaterial({
+      transmission: 1, thickness: 1.4, roughness: 0.06, ior: 1.45,
+      metalness: 0, clearcoat: 1, clearcoatRoughness: 0.12,
+      color: new THREE.Color(tint), attenuationColor: new THREE.Color(tint), attenuationDistance: 2.4,
+      envMapIntensity: 1.3, specularIntensity: 1
+    });
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // Componente: JANELA de vidro (card 3D)
+    const win = new THREE.Mesh(new RoundedBoxGeometry(3.4, 2.2, 0.28, 6, 0.14), glass(0xffffff));
+    win.position.set(0, 0.15, 0);
+    group.add(win);
+
+    // Componente: BOTÕES de vidro + 1 sólido accent
+    const btnGeo = new RoundedBoxGeometry(1.15, 0.46, 0.22, 5, 0.2);
+    const glassBtn = new THREE.Mesh(btnGeo, glass(0xffffff));
+    glassBtn.position.set(-0.85, -0.55, 0.55);
+    const primaryBtn = new THREE.Mesh(btnGeo, new THREE.MeshPhysicalMaterial({
+      color: accent, roughness: 0.25, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.15, envMapIntensity: 1
+    }));
+    primaryBtn.position.set(0.6, -0.55, 0.55);
+    const buttons = [glassBtn, primaryBtn];
+    group.add(glassBtn, primaryBtn);
+
+    // interação: hover destaca botões
+    const ray = new THREE.Raycaster();
+    const ptr = new THREE.Vector2(-2, -2);
+    addEventListener('pointermove', (e) => { ptr.x = (e.clientX / innerWidth) * 2 - 1; ptr.y = -(e.clientY / innerHeight) * 2 + 1; });
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = 0.06;
+    controls.enablePan = false; controls.minDistance = 5; controls.maxDistance = 12;
+    controls.autoRotate = !reduced; controls.autoRotateSpeed = 0.7;
+    controls.target.set(0, 0, 0);
+
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      if (!reduced) orbs.forEach((o, i) => { o.position.y += Math.sin(t * 0.8 + i) * 0.0025; });
+
+      // hover
+      ray.setFromCamera(ptr, camera);
+      const hit = ray.intersectObjects(buttons)[0]?.object;
+      buttons.forEach((b) => {
+        const target = b === hit ? 1.12 : 1;
+        b.scale.lerp(new THREE.Vector3(target, target, target), 0.2);
+      });
+      document.body.style.cursor = hit ? 'pointer' : 'default';
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
