@@ -1,40 +1,40 @@
 /* ============================================================
-   RetroKit AERO — v0.2
-   A evolução da linhagem: Win95 → XP → Vista/Aero glass.
-   Estilo: Frutiger Aero (vidro fosco, brilho aqua, natureza-tech).
-   Método: frontend-design (tokens nomeados + 1 assinatura) +
-   glassmorphism/typography vindos do ui-ux-pro-max.
+   RetroKit AERO BRUT — v0.3
+   Colisão: vidro Aero (glossy, aqua, translúcido) + brutalismo
+   (borda preta grossa, sombra dura offset, mono caixa-alta,
+   cantos afiados, "afundar na sombra" ao clicar).
+   Fontes das decisões: frontend-design (assinatura única) +
+   ui-ux-pro-max (Neubrutalism + par mono "Brutalist Raw").
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap');
 
 :root {
-  /* --- Paleta (6 hex nomeados) --- */
-  --sky:    #7ec8ff;   /* céu */
-  --deep:   #1b6fc4;   /* azul profundo, herança XP */
-  --aqua:   #23c3c0;   /* água/teal */
-  --grass:  #7ed957;   /* verde Frutiger, natureza-tech */
-  --ink:    #0c2b46;   /* texto azul-tinta sobre vidro */
-  --amber:  #ffb020;   /* destaque quente pontual */
+  /* --- Paleta --- */
+  --sky:   #7ec8ff;
+  --deep:  #1b6fc4;
+  --aqua:  #23c3c0;
+  --grass: #7ed957;
+  --ink:   #0c2b46;
+  --amber: #ffcf33;
+  --edge:  #0a1712;   /* preto-concreto: bordas e sombra dura */
 
-  /* --- Vidro (a assinatura) --- */
-  --glass:      rgba(255, 255, 255, .58);
-  --glass-strong: rgba(255, 255, 255, .74);
-  --glass-line: rgba(255, 255, 255, .85);   /* borda-luz superior */
-  --glass-edge: rgba(13, 43, 70, .18);       /* borda inferior/sombra */
+  /* --- Vidro (alma Aero preservada) --- */
+  --glass:        rgba(255, 255, 255, .60);
+  --glass-strong: rgba(255, 255, 255, .78);
 
   /* --- Tipografia --- */
-  --font-display: "Varela Round", system-ui, sans-serif;
-  --font-body: "Nunito Sans", system-ui, sans-serif;
+  --font-ui:   "Space Mono", ui-monospace, monospace;  /* estrutura, botões, títulos */
+  --font-body: "Nunito Sans", system-ui, sans-serif;   /* corpo legível */
 
-  /* --- Escala / forma --- */
-  --pad: 14px;
-  --radius: 16px;      /* bolha: cantos generosos = Aero */
-  --radius-sm: 11px;
+  /* --- Forma brutalista --- */
+  --radius: 4px;
+  --bord: 3px solid var(--edge);
+  --bord-sm: 2px solid var(--edge);
 
-  /* --- Sombras em camadas (profundidade de vidro) --- */
-  --lift: 0 1px 0 var(--glass-line) inset, 0 10px 30px rgba(9, 40, 70, .28), 0 2px 6px rgba(9, 40, 70, .18);
-  --lift-sm: 0 1px 0 rgba(255,255,255,.7) inset, 0 3px 10px rgba(9, 40, 70, .22);
+  /* --- Sombra DURA (sem blur) = assinatura da fusão --- */
+  --hard: 7px 7px 0 var(--edge);
+  --hard-sm: 4px 4px 0 var(--edge);
 }
 
 * { box-sizing: border-box; }
@@ -45,249 +45,249 @@ body {
   font-family: var(--font-body);
   color: var(--ink);
   overflow-x: hidden;
-  padding: 48px 20px 96px;
-  /* Horizonte Frutiger: céu → água → grama */
+  padding: 48px 22px 108px;
   background:
     radial-gradient(130% 115% at 50% -18%, #d6f1ff 0%, #8fd2ff 26%, #37a6e0 56%, rgba(55,166,224,0) 60%),
     linear-gradient(180deg, #6fc0f5 0%, #33aad4 42%, #35c39c 74%, #86e06a 100%);
   background-attachment: fixed;
 }
 
-/* --- Bolhas ambiente (atrás de tudo) --- */
+/* --- Bolhas ambiente (alma Aero) --- */
 .aero-bubbles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .aero-bubbles span {
-  position: absolute; bottom: -12%;
-  border-radius: 50%;
+  position: absolute; bottom: -12%; border-radius: 50%;
   background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9), rgba(255,255,255,.28) 42%, rgba(255,255,255,0) 70%);
-  box-shadow: 0 0 12px rgba(255,255,255,.4);
   animation: rise linear infinite;
 }
 @keyframes rise {
-  0%   { transform: translateY(0) translateX(0) scale(.8); opacity: 0; }
-  15%  { opacity: .9; }
-  100% { transform: translateY(-118vh) translateX(30px) scale(1.15); opacity: 0; }
+  0%   { transform: translateY(0) scale(.8); opacity: 0; }
+  15%  { opacity: .85; }
+  100% { transform: translateY(-118vh) translateX(28px) scale(1.15); opacity: 0; }
 }
 
 .rk-container { position: relative; z-index: 1; max-width: 940px; margin: 0 auto; }
 
-/* --- Hero --- */
-.rk-hero { text-align: center; color: #fff; margin-bottom: 34px; }
+/* --- Hero (mono, caixa-alta, bloco duro) --- */
+.rk-hero { margin-bottom: 36px; }
 .rk-hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(38px, 7vw, 58px); margin: 0 0 8px; letter-spacing: .5px;
-  text-shadow: 0 2px 0 rgba(255,255,255,.25), 0 4px 18px rgba(6,32,58,.5);
+  font-family: var(--font-ui); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(30px, 6vw, 50px); line-height: 1.02; letter-spacing: -1px;
+  margin: 0 0 14px; color: #fff; display: inline-block;
+  padding: 8px 16px; background: var(--edge); border: var(--bord);
+  box-shadow: var(--hard);
 }
-.rk-hero p { margin: 0 auto; max-width: 46ch; font-size: 17px; opacity: .96; text-shadow: 0 1px 6px rgba(6,32,58,.4); }
+.rk-hero p { margin: 0; max-width: 52ch; font-size: 16px; color: #fff; font-weight: 600;
+  text-shadow: 0 1px 6px rgba(6,32,58,.5); }
 
-.rk-section-title {
-  color: #fff; font-family: var(--font-display);
-  font-size: 14px; letter-spacing: .6px; margin: 30px 6px 12px;
-  text-shadow: 0 1px 6px rgba(6,32,58,.45);
+/* eyebrow estrutural: expõe o "esqueleto" (bem brutalista) */
+.rk-eyebrow {
+  display: inline-block; font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--edge);
+  background: var(--amber); border: var(--bord-sm); padding: 2px 8px; margin: 30px 4px 10px;
+  box-shadow: var(--hard-sm);
 }
 
 /* ============================================================
-   Assinatura: superfície de VIDRO AERO
-   Vidro fosco real + faixa de reflexo diagonal no topo.
+   Assinatura: painel de VIDRO sobre CONCRETO
+   backdrop-filter + gloss diagonal, mas com borda preta 3px
+   e sombra dura offset (o vidro "flutua" sobre o bloco preto).
    ============================================================ */
 .rk-window {
   position: relative;
   background: var(--glass);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
   backdrop-filter: blur(16px) saturate(1.4);
-  border: 1px solid var(--glass-line);
-  border-bottom-color: var(--glass-edge);
-  border-radius: var(--radius);
-  box-shadow: var(--lift);
+  border: var(--bord); border-radius: var(--radius);
+  box-shadow: var(--hard);
   overflow: hidden;
-  animation: materialize .5s cubic-bezier(.2, .8, .2, 1) both;
+  animation: materialize .32s cubic-bezier(.2, .8, .2, 1) both;
 }
-/* reflexo Aero: brilho que corta o topo na diagonal */
-.rk-window::before {
+.rk-window::before { /* reflexo Aero preservado */
   content: ""; position: absolute; inset: 0 0 auto 0; height: 52%;
-  background: linear-gradient(158deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 42%, rgba(255,255,255,0) 60%);
-  pointer-events: none;
+  background: linear-gradient(158deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.1) 42%, rgba(255,255,255,0) 60%);
+  pointer-events: none; z-index: 2;
 }
 @keyframes materialize {
-  from { opacity: 0; transform: translateY(12px) scale(.985); filter: blur(4px); }
-  to   { opacity: 1; transform: none; filter: none; }
+  from { opacity: 0; transform: translate(-4px, -4px); }
+  to   { opacity: 1; transform: none; }
 }
 
 .rk-titlebar {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; gap: 9px; padding: 11px 13px;
-  color: #fff; font-family: var(--font-display); font-size: 15px;
-  background: linear-gradient(180deg, rgba(126,200,255,.95) 0%, rgba(27,111,196,.95) 100%);
-  border-bottom: 1px solid rgba(255,255,255,.4);
-  text-shadow: 0 1px 2px rgba(6,32,58,.5);
+  position: relative; z-index: 3;
+  display: flex; align-items: center; gap: 9px; padding: 10px 13px;
+  color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 1px;
+  background: linear-gradient(180deg, var(--sky) 0%, var(--deep) 100%);
+  border-bottom: var(--bord);
+  text-shadow: 0 1px 2px rgba(6,32,58,.6);
 }
 .rk-titlebar .rk-title { flex: 1; }
-.rk-titlebar .rk-dot { width: 11px; height: 11px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff, var(--grass) 70%); box-shadow: 0 0 6px rgba(255,255,255,.7); }
+.rk-titlebar .rk-dot { width: 12px; height: 12px; border: var(--bord-sm);
+  background: var(--grass); }
 
-.rk-window-controls { display: flex; gap: 7px; }
+.rk-window-controls { display: flex; gap: 6px; }
 .rk-ctl {
-  width: 26px; height: 22px; border: 1px solid rgba(255,255,255,.5); border-radius: 8px;
-  background: rgba(255,255,255,.22); color: #fff; cursor: pointer;
-  font-size: 12px; display: grid; place-items: center; transition: background .15s ease, transform .06s ease;
+  width: 26px; height: 22px; border: var(--bord-sm); border-radius: 2px;
+  background: rgba(255,255,255,.35); color: var(--edge); cursor: pointer;
+  font-family: var(--font-ui); font-weight: 700; font-size: 12px; display: grid; place-items: center;
+  transition: background .1s ease, transform .05s ease;
 }
-.rk-ctl:hover { background: rgba(255,255,255,.42); }
-.rk-ctl:active { transform: translateY(1px); }
-.rk-ctl.rk-close:hover { background: #ff6a5a; border-color: #ff6a5a; }
+.rk-ctl:hover { background: #fff; }
+.rk-ctl:active { transform: translate(1px, 1px); }
+.rk-ctl.rk-close:hover { background: #ff5a45; color: #fff; }
 
-.rk-window-body { position: relative; z-index: 1; padding: var(--pad); }
-.rk-window-body p { margin: 0 0 12px; line-height: 1.6; }
+.rk-window-body { position: relative; z-index: 3; padding: 15px; }
+.rk-window-body p { margin: 0 0 13px; line-height: 1.6; }
+.rk-window-body code { font-family: var(--font-ui); font-size: .9em; background: var(--amber);
+  border: 1px solid var(--edge); padding: 0 4px; }
 
 /* ============================================================
-   Assinatura 2: botão AQUA glossy (Web 2.0)
-   Gloss branco na metade de cima + varredura de brilho no hover.
+   Botão: gloss aqua (Aero) + borda preta + sombra dura.
+   Ao clicar: AFUNDA na sombra (assinatura neubrutalista).
    ============================================================ */
 .rk-btn {
   position: relative; overflow: hidden;
-  font-family: var(--font-display); font-size: 14px; color: var(--ink);
-  padding: 9px 20px; min-height: 40px; border-radius: 999px; cursor: pointer;
-  border: 1px solid rgba(255,255,255,.7);
+  font-family: var(--font-ui); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--edge); padding: 10px 18px; min-height: 42px; border-radius: var(--radius);
+  border: var(--bord-sm); cursor: pointer;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.35) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.18) 100%),
-    linear-gradient(180deg, #ffffff 0%, #dce8f2 100%);
-  box-shadow: var(--lift-sm);
-  transition: transform .07s ease, filter .15s ease, box-shadow .15s ease;
+    linear-gradient(180deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.3) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.18) 100%),
+    linear-gradient(180deg, #ffffff 0%, #dbe7f1 100%);
+  box-shadow: var(--hard-sm);
+  transition: transform .06s ease, box-shadow .06s ease, filter .12s ease;
 }
-.rk-btn::after { /* varredura de brilho */
+.rk-btn::after { /* sweep de brilho: o vidro insiste em brilhar */
   content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
-  background: linear-gradient(105deg, transparent, rgba(255,255,255,.75), transparent);
-  transform: skewX(-18deg); transition: left .5s ease;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.7), transparent);
+  transform: skewX(-18deg); transition: left .45s ease;
 }
-.rk-btn:hover { filter: brightness(1.05); }
+.rk-btn:hover { filter: brightness(1.04); }
 .rk-btn:hover::after { left: 130%; }
-.rk-btn:active { transform: translateY(1px) scale(.99); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 2px 6px rgba(9,40,70,.22); }
+.rk-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--edge); }
 .rk-btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 
-.rk-btn.rk-primary {
-  color: #fff; border-color: rgba(255,255,255,.55); text-shadow: 0 1px 2px rgba(6,32,58,.5);
+.rk-btn.rk-primary { color: #fff; text-shadow: 0 1px 2px rgba(6,32,58,.6);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.15) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
-    linear-gradient(180deg, var(--sky) 0%, var(--deep) 100%);
-}
-.rk-btn.rk-grass {
-  color: #093a12; border-color: rgba(255,255,255,.6);
+    linear-gradient(180deg, rgba(255,255,255,.7) 0%, rgba(255,255,255,.12) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
+    linear-gradient(180deg, var(--sky) 0%, var(--deep) 100%); }
+.rk-btn.rk-grass { color: #093a12;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.15) 100%),
-    linear-gradient(180deg, #a7ef7e 0%, var(--grass) 100%);
-}
-.rk-btn.rk-danger {
-  color: #fff; border-color: rgba(255,255,255,.5); text-shadow: 0 1px 2px rgba(90,10,0,.5);
+    linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.22) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.15) 100%),
+    linear-gradient(180deg, #a7ef7e 0%, var(--grass) 100%); }
+.rk-btn.rk-danger { color: #fff; text-shadow: 0 1px 2px rgba(90,10,0,.55);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.7) 0%, rgba(255,255,255,.15) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
-    linear-gradient(180deg, #ff8b7a 0%, #e04a38 100%);
-}
-.rk-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); }
+    linear-gradient(180deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.12) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
+    linear-gradient(180deg, #ff8b7a 0%, #e04a38 100%); }
+.rk-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); box-shadow: var(--hard-sm); }
 .rk-btn:disabled::after { display: none; }
+.rk-btn:disabled:active { transform: none; }
 
 /* ============================================================
    Campos
    ============================================================ */
-.rk-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-.rk-field label { font-size: 13px; font-weight: 600; color: var(--ink); }
+.rk-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+.rk-field label { font-family: var(--font-ui); font-weight: 700; font-size: 12px;
+  text-transform: uppercase; letter-spacing: .5px; color: var(--edge); }
 
 .rk-input, .rk-select {
-  font-family: var(--font-body); font-size: 15px; min-height: 42px;
-  padding: 9px 13px; border-radius: var(--radius-sm);
-  border: 1px solid rgba(255,255,255,.8); border-top-color: var(--glass-edge);
-  background: rgba(255,255,255,.72); color: var(--ink);
-  box-shadow: inset 0 2px 4px rgba(9,40,70,.12);
+  font-family: var(--font-body); font-size: 15px; min-height: 44px;
+  padding: 10px 13px; border: var(--bord-sm); border-radius: var(--radius);
+  background: rgba(255,255,255,.8); color: var(--ink);
+  box-shadow: inset 3px 3px 0 rgba(10,23,18,.12);
 }
 .rk-input::placeholder { color: #5a7488; }
 .rk-input:focus, .rk-select:focus {
-  outline: none; border-color: var(--aqua);
-  box-shadow: inset 0 2px 4px rgba(9,40,70,.12), 0 0 0 4px rgba(35,195,192,.3);
+  outline: none; box-shadow: inset 0 0 0 rgba(0,0,0,0), var(--hard-sm);
+  background: #fff;
 }
 
 /* ============================================================
-   Check / Radio / Toggle
+   Check / Toggle
    ============================================================ */
-.rk-check { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 9px; cursor: pointer; min-height: 28px; }
-.rk-check input { width: 19px; height: 19px; accent-color: var(--aqua); }
+.rk-check { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 10px; cursor: pointer; min-height: 30px; }
+.rk-check input { width: 20px; height: 20px; accent-color: var(--aqua); }
 
 .rk-toggle { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; }
 .rk-toggle input { position: absolute; opacity: 0; }
 .rk-toggle .track {
-  width: 48px; height: 26px; border-radius: 999px; transition: background .2s ease;
-  background: linear-gradient(180deg, #c3d2dd, #9fb2bf); box-shadow: inset 0 2px 4px rgba(9,40,70,.25);
+  width: 50px; height: 27px; border: var(--bord-sm); border-radius: 999px; transition: background .15s ease;
+  background: #c3d2dd;
 }
 .rk-toggle .track::before {
-  content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff, #e4eef5); box-shadow: 0 2px 5px rgba(9,40,70,.4);
-  transition: transform .2s cubic-bezier(.3,1.4,.5,1);
+  content: ""; position: absolute; top: 4px; left: 4px; width: 19px; height: 19px; border: var(--bord-sm);
+  background: #fff; transition: transform .12s ease;
 }
-.rk-toggle input:checked + .track { background: linear-gradient(180deg, #6fe0d0, var(--aqua)); }
-.rk-toggle input:checked + .track::before { transform: translateX(22px); }
+.rk-toggle input:checked + .track { background: var(--aqua); }
+.rk-toggle input:checked + .track::before { transform: translateX(23px); }
 .rk-toggle input:focus-visible + .track { outline: 3px solid var(--amber); outline-offset: 2px; }
 
 /* ============================================================
-   Progresso (líquido)
+   Progresso (líquido, mas emoldurado em preto)
    ============================================================ */
 .rk-progress {
-  height: 24px; border-radius: 999px; overflow: hidden; padding: 3px;
-  background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8);
-  box-shadow: inset 0 2px 5px rgba(9,40,70,.2);
+  height: 26px; overflow: hidden; padding: 3px; border: var(--bord-sm); border-radius: var(--radius);
+  background: rgba(255,255,255,.6);
 }
 .rk-progress-bar {
-  height: 100%; border-radius: 999px; width: 66%;
+  height: 100%; width: 66%; border-radius: 1px;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%),
     linear-gradient(90deg, var(--aqua), var(--sky));
-  box-shadow: 0 0 10px rgba(35,195,192,.6);
   position: relative; overflow: hidden;
 }
 .rk-progress-bar::after {
   content: ""; position: absolute; inset: 0;
-  background: repeating-linear-gradient(115deg, rgba(255,255,255,.35) 0 12px, transparent 12px 26px);
+  background: repeating-linear-gradient(115deg, rgba(255,255,255,.4) 0 12px, transparent 12px 26px);
   animation: flow 1s linear infinite;
 }
 @keyframes flow { to { transform: translateX(26px); } }
 
 /* --- Badge --- */
 .rk-badge {
-  display: inline-block; font-family: var(--font-display); font-size: 12px;
-  padding: 3px 11px; border-radius: 999px; color: #4a2c00;
-  background: linear-gradient(180deg, #ffd778, var(--amber));
-  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 2px 5px rgba(120,70,0,.3);
+  display: inline-block; font-family: var(--font-ui); font-weight: 700; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .5px; padding: 2px 9px; color: var(--edge);
+  background: var(--amber); border: var(--bord-sm); box-shadow: var(--hard-sm);
 }
 
 /* --- Layout auxiliar --- */
-.rk-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.rk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.rk-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.rk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media (max-width: 640px) { .rk-grid { grid-template-columns: 1fr; } }
 
 /* ============================================================
-   Dock / Taskbar (vidro)
+   Dock / Taskbar (vidro + moldura preta + sombra dura)
    ============================================================ */
 .rk-taskbar {
-  position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; z-index: 5;
-  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
-  border-radius: 999px; border: 1px solid var(--glass-line);
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 5;
+  display: flex; align-items: center; gap: 11px; padding: 9px 13px;
+  border: var(--bord); border-radius: var(--radius);
   background: var(--glass-strong);
   -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
-  box-shadow: var(--lift);
+  box-shadow: var(--hard);
 }
 .rk-start {
-  display: flex; align-items: center; gap: 9px; font-family: var(--font-display);
-  padding: 9px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,.6);
-  color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(6,32,58,.5);
+  display: flex; align-items: center; gap: 9px; font-family: var(--font-ui); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px; font-size: 13px;
+  padding: 10px 16px; border: var(--bord-sm); border-radius: var(--radius);
+  color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(6,32,58,.6);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,0) 50%),
+    linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,0) 50%),
     linear-gradient(180deg, #7ee07a, #2e9e4f);
-  box-shadow: var(--lift-sm);
+  box-shadow: var(--hard-sm);
+  transition: transform .06s ease, box-shadow .06s ease;
 }
-.rk-start .rk-orb { width: 15px; height: 15px; border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, #fff, #cfeecb 60%, #6cc06a); box-shadow: 0 0 6px rgba(255,255,255,.8); }
-.rk-clock { font-family: var(--font-display); font-size: 14px; color: var(--ink); padding: 0 8px; }
+.rk-start:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--edge); }
+.rk-start .rk-orb { width: 15px; height: 15px; border: var(--bord-sm); background: var(--grass); }
+.rk-clock { font-family: var(--font-ui); font-weight: 700; font-size: 13px; color: var(--ink); padding: 0 8px; }
 
 /* ============================================================
-   Acessibilidade: respeita quem pede menos movimento
+   Acessibilidade
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .aero-bubbles { display: none; }
-  .rk-window, .rk-progress-bar::after, .rk-btn::after { animation: none !important; transition: none !important; }
+  .rk-window, .rk-progress-bar::after, .rk-btn::after,
+  .rk-btn, .rk-start, .rk-ctl, .rk-toggle .track, .rk-toggle .track::before {
+    animation: none !important; transition: none !important;
+  }
   .rk-btn:hover::after { left: -60%; }
 }
