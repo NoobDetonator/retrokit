@@ -1,311 +1,257 @@
 /* ============================================================
-   RetroKit AERO BRUT + MEMPHIS — v0.4
-   Vidro Aero (glossy, aqua) + brutalismo (borda preta, sombra
-   dura, mono) + Memphis Pop: formas geométricas coloridas atrás
-   do vidro fosco brilham borradas através dele.
-   Fontes: frontend-design + ui-ux-pro-max (Neubrutalism, Memphis,
-   Glassmorphism, par mono "Brutalist Raw").
+   RetroKit FROST — v0.5
+   A versão minimalista/clean do sistema. Glassmorphism feito
+   corretamente: translucidez baixa, borda-de-luz fina, realce
+   interno, sombra difusa, camadas, fundo suave pra refratar.
+   Paleta neutra (branco/preto) + 1 token de marca (--accent).
+   Base do glass: recipe do ui-ux-pro-max (blur 10-20px, rgba
+   white baixa, borda 1px light, garantir 4.5:1). Type: Inter.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* --- Paleta --- */
-  --sky:   #7ec8ff;
-  --deep:  #1b6fc4;
-  --aqua:  #23c3c0;
-  --grass: #7ed957;
-  --ink:   #0c2b46;
-  --amber: #ffcf33;
-  --edge:  #0a1712;   /* preto-concreto: bordas e sombra dura */
+  color-scheme: light dark;
 
-  /* --- Memphis pop (fundo que brilha através do vidro) --- */
-  --m-pink:   #ff5da2;
-  --m-coral:  #ff7a59;
-  --m-purple: #9b5de5;
+  /* --- Marca: o único botão a girar por caso de uso --- */
+  --accent:      #2b6cd9;
+  --accent-ink:  #ffffff;   /* texto sobre o accent */
+  --accent-soft: rgba(43, 108, 217, .12);
+  --danger:      #d9534f;
 
-  /* --- Vidro (alma Aero preservada) --- */
-  --glass:        rgba(255, 255, 255, .56);
-  --glass-strong: rgba(255, 255, 255, .74);
+  /* --- Neutros --- */
+  --ink:     #16202c;
+  --ink-dim: #5b6b7c;
 
-  /* --- Tipografia --- */
-  --font-ui:   "Space Mono", ui-monospace, monospace;  /* estrutura, botões, títulos */
-  --font-body: "Nunito Sans", system-ui, sans-serif;   /* corpo legível */
+  /* --- Fundo (neutro + blobs suaves de cor pro vidro refratar) --- */
+  --bg:
+    radial-gradient(42% 52% at 14% 18%, rgba(43,108,217,.18), transparent 70%),
+    radial-gradient(46% 56% at 86% 78%, rgba(35,195,192,.16), transparent 70%),
+    linear-gradient(135deg, #eef2f7 0%, #e5ecf3 100%);
 
-  /* --- Forma brutalista --- */
-  --radius: 4px;
-  --bord: 3px solid var(--edge);
-  --bord-sm: 2px solid var(--edge);
+  /* --- VIDRO (a receita correta) --- */
+  --glass:        rgba(255, 255, 255, .42);   /* translúcido de verdade */
+  --glass-2:      rgba(255, 255, 255, .55);   /* camada aninhada mais densa */
+  --glass-border: rgba(255, 255, 255, .70);   /* borda-de-luz fina */
+  --glass-hi:     rgba(255, 255, 255, .85);   /* realce interno no topo */
+  --blur: 18px;
 
-  /* --- Sombra DURA (sem blur) = assinatura da fusão --- */
-  --hard: 7px 7px 0 var(--edge);
-  --hard-sm: 4px 4px 0 var(--edge);
+  /* --- Sombra difusa (não dura) --- */
+  --shadow: 0 10px 34px rgba(15, 30, 50, .12), 0 2px 8px rgba(15, 30, 50, .07);
+  --shadow-sm: 0 4px 14px rgba(15, 30, 50, .10);
+
+  --font: "Inter", system-ui, -apple-system, sans-serif;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent:      #5b9bff;
+    --accent-ink:  #071018;
+    --accent-soft: rgba(91, 155, 255, .16);
+    --danger:      #ff6b66;
+    --ink:     #e9eef5;
+    --ink-dim: #94a3b5;
+    --bg:
+      radial-gradient(42% 52% at 14% 18%, rgba(91,155,255,.22), transparent 70%),
+      radial-gradient(46% 56% at 86% 78%, rgba(35,195,192,.16), transparent 70%),
+      linear-gradient(135deg, #0d1220 0%, #0a0e18 100%);
+    --glass:        rgba(255, 255, 255, .07);
+    --glass-2:      rgba(255, 255, 255, .11);
+    --glass-border: rgba(255, 255, 255, .16);
+    --glass-hi:     rgba(255, 255, 255, .22);
+    --shadow: 0 16px 40px rgba(0, 0, 0, .5), 0 2px 10px rgba(0, 0, 0, .4);
+    --shadow-sm: 0 6px 18px rgba(0, 0, 0, .4);
+  }
 }
 
 * { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: var(--font-body);
-  color: var(--ink);
-  overflow-x: hidden;
-  padding: 48px 22px 108px;
-  background:
-    radial-gradient(130% 115% at 50% -18%, #d6f1ff 0%, #8fd2ff 26%, #37a6e0 56%, rgba(55,166,224,0) 60%),
-    linear-gradient(180deg, #6fc0f5 0%, #33aad4 42%, #35c39c 74%, #86e06a 100%);
-  background-attachment: fixed;
+  margin: 0; min-height: 100vh;
+  font-family: var(--font); color: var(--ink);
+  padding: 64px 22px 120px;
+  background: var(--bg) fixed;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* --- Fundo Memphis: formas geométricas coloridas atrás do vidro --- */
-.memphis-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.memphis-bg svg { position: absolute; }
+.rk-container { max-width: 900px; margin: 0 auto; }
 
-/* --- Confete flutuante (dots Memphis) — "Bolhas flutuantes" --- */
-.aero-bubbles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.aero-bubbles span {
-  position: absolute; bottom: -12%; border-radius: 50%;
-  border: 2px solid var(--edge);
-  animation: rise linear infinite;
-}
-@keyframes rise {
-  0%   { transform: translateY(0) rotate(0) scale(.8); opacity: 0; }
-  15%  { opacity: .9; }
-  100% { transform: translateY(-118vh) translateX(28px) rotate(180deg) scale(1.1); opacity: 0; }
-}
-
-.rk-container { position: relative; z-index: 1; max-width: 940px; margin: 0 auto; }
-
-/* --- Hero (mono, caixa-alta, bloco duro) --- */
-.rk-hero { margin-bottom: 36px; }
+/* --- Hero (minimalista: muito respiro, pouco peso) --- */
+.rk-hero { margin-bottom: 44px; }
 .rk-hero h1 {
-  font-family: var(--font-ui); font-weight: 700; text-transform: uppercase;
-  font-size: clamp(30px, 6vw, 50px); line-height: 1.02; letter-spacing: -1px;
-  margin: 0 0 14px; color: #fff; display: inline-block;
-  padding: 8px 16px; background: var(--edge); border: var(--bord);
-  box-shadow: var(--hard);
+  font-size: clamp(34px, 6vw, 52px); font-weight: 700; letter-spacing: -1.5px;
+  line-height: 1.04; margin: 0 0 14px;
 }
-.rk-hero p { margin: 0; max-width: 52ch; font-size: 16px; color: #fff; font-weight: 600;
-  text-shadow: 0 1px 6px rgba(6,32,58,.5); }
+.rk-hero p { margin: 0; max-width: 52ch; font-size: 17px; line-height: 1.6; color: var(--ink-dim); }
 
-/* eyebrow estrutural: expõe o "esqueleto" (bem brutalista) */
+/* label estrutural discreto */
 .rk-eyebrow {
-  display: inline-block; font-family: var(--font-ui); font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 2px; color: var(--edge);
-  background: var(--amber); border: var(--bord-sm); padding: 2px 8px; margin: 30px 4px 10px;
-  box-shadow: var(--hard-sm);
+  display: block; font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.6px; color: var(--accent); margin: 40px 4px 12px;
 }
 
 /* ============================================================
-   Assinatura: painel de VIDRO sobre CONCRETO
-   backdrop-filter + gloss diagonal, mas com borda preta 3px
-   e sombra dura offset (o vidro "flutua" sobre o bloco preto).
+   VIDRO — a peça central, feita corretamente
+   translucidez baixa + backdrop-blur + borda-de-luz + realce
+   interno no topo + sombra difusa.
    ============================================================ */
 .rk-window {
   position: relative;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(22px) saturate(1.7);
-  backdrop-filter: blur(22px) saturate(1.7);
-  border: var(--bord); border-radius: var(--radius);
-  box-shadow: var(--hard);
-  overflow: visible;
-  animation: materialize .32s cubic-bezier(.2, .8, .2, 1) both;
-}
-/* clip só o vidro/reflexo; deixa adesivos Memphis vazarem a borda */
-.rk-window > .rk-titlebar { border-top-left-radius: 1px; border-top-right-radius: 1px; }
-
-/* Adesivo Memphis: forma nítida com contorno preto, por cima da janela */
-.rk-sticker { position: absolute; z-index: 4; pointer-events: none; filter: drop-shadow(3px 3px 0 var(--edge)); }
-.rk-sticker.tr { top: -18px; right: -14px; }
-.rk-sticker.bl { bottom: -16px; left: -12px; }
-.rk-window::before { /* reflexo Aero preservado */
-  content: ""; position: absolute; inset: 0 0 auto 0; height: 52%;
-  background: linear-gradient(158deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.1) 42%, rgba(255,255,255,0) 60%);
-  pointer-events: none; z-index: 2;
-}
-@keyframes materialize {
-  from { opacity: 0; transform: translate(-4px, -4px); }
-  to   { opacity: 1; transform: none; }
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(1.3);
+  backdrop-filter: blur(var(--blur)) saturate(1.3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-hi);
+  overflow: hidden;
 }
 
 .rk-titlebar {
-  position: relative; z-index: 3;
-  display: flex; align-items: center; gap: 9px; padding: 10px 13px;
-  color: #fff; font-family: var(--font-ui); font-weight: 700; font-size: 13px;
-  text-transform: uppercase; letter-spacing: 1px;
-  background: linear-gradient(180deg, var(--sky) 0%, var(--deep) 100%);
-  border-bottom: var(--bord);
-  text-shadow: 0 1px 2px rgba(6,32,58,.6);
+  display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 14px; font-weight: 600;
 }
 .rk-titlebar .rk-title { flex: 1; }
-.rk-titlebar .rk-dot { width: 12px; height: 12px; border: var(--bord-sm);
-  background: var(--grass); }
+.rk-titlebar .rk-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
 
-.rk-window-controls { display: flex; gap: 6px; }
+.rk-window-controls { display: flex; gap: 8px; }
 .rk-ctl {
-  width: 26px; height: 22px; border: var(--bord-sm); border-radius: 2px;
-  background: rgba(255,255,255,.35); color: var(--edge); cursor: pointer;
-  font-family: var(--font-ui); font-weight: 700; font-size: 12px; display: grid; place-items: center;
-  transition: background .1s ease, transform .05s ease;
+  width: 13px; height: 13px; border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(120, 140, 160, .35); padding: 0; transition: background .15s ease;
 }
-.rk-ctl:hover { background: #fff; }
-.rk-ctl:active { transform: translate(1px, 1px); }
-.rk-ctl.rk-close:hover { background: #ff5a45; color: #fff; }
+.rk-ctl:hover { background: rgba(120, 140, 160, .6); }
+.rk-ctl.rk-close:hover { background: var(--danger); }
 
-.rk-window-body { position: relative; z-index: 3; padding: 15px; }
-.rk-window-body p { margin: 0 0 13px; line-height: 1.6; }
-.rk-window-body code { font-family: var(--font-ui); font-size: .9em; background: var(--amber);
-  border: 1px solid var(--edge); padding: 0 4px; }
+.rk-window-body { padding: 18px 16px; }
+.rk-window-body p { margin: 0 0 16px; line-height: 1.65; color: var(--ink-dim); }
+.rk-window-body code {
+  font-family: ui-monospace, "SF Mono", monospace; font-size: .88em;
+  background: var(--accent-soft); color: var(--accent); padding: 1px 6px; border-radius: 5px;
+}
+
+/* camada aninhada = profundidade de vidro */
+.rk-panel {
+  background: var(--glass-2);
+  border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+  padding: 14px; box-shadow: inset 0 1px 0 var(--glass-hi);
+}
 
 /* ============================================================
-   Botão: gloss aqua (Aero) + borda preta + sombra dura.
-   Ao clicar: AFUNDA na sombra (assinatura neubrutalista).
+   Botões — minimalistas
+   primário sólido (accent) · glass · fantasma · perigo
    ============================================================ */
 .rk-btn {
-  position: relative; overflow: hidden;
-  font-family: var(--font-ui); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .5px;
-  color: var(--edge); padding: 10px 18px; min-height: 42px; border-radius: var(--radius);
-  border: var(--bord-sm); cursor: pointer;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.3) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.18) 100%),
-    linear-gradient(180deg, #ffffff 0%, #dbe7f1 100%);
-  box-shadow: var(--hard-sm);
-  transition: transform .06s ease, box-shadow .06s ease, filter .12s ease;
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  padding: 10px 18px; min-height: 42px; border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border); cursor: pointer; color: var(--ink);
+  background: var(--glass-2);
+  -webkit-backdrop-filter: blur(var(--blur)); backdrop-filter: blur(var(--blur));
+  box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-hi);
+  transition: transform .08s ease, filter .15s ease, background .15s ease;
 }
-.rk-btn::after { /* sweep de brilho: o vidro insiste em brilhar */
-  content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
-  background: linear-gradient(105deg, transparent, rgba(255,255,255,.7), transparent);
-  transform: skewX(-18deg); transition: left .45s ease;
-}
-.rk-btn:hover { filter: brightness(1.04); }
-.rk-btn:hover::after { left: 130%; }
-.rk-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--edge); }
-.rk-btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.rk-btn:hover { filter: brightness(1.03); transform: translateY(-1px); }
+.rk-btn:active { transform: translateY(0); }
+.rk-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.rk-btn.rk-primary { color: #fff; text-shadow: 0 1px 2px rgba(6,32,58,.6);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.7) 0%, rgba(255,255,255,.12) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
-    linear-gradient(180deg, var(--sky) 0%, var(--deep) 100%); }
-.rk-btn.rk-grass { color: #093a12;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.22) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.15) 100%),
-    linear-gradient(180deg, #a7ef7e 0%, var(--grass) 100%); }
-.rk-btn.rk-danger { color: #fff; text-shadow: 0 1px 2px rgba(90,10,0,.55);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.12) 48%, rgba(255,255,255,0) 49%, rgba(255,255,255,.12) 100%),
-    linear-gradient(180deg, #ff8b7a 0%, #e04a38 100%); }
-.rk-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); box-shadow: var(--hard-sm); }
-.rk-btn:disabled::after { display: none; }
-.rk-btn:disabled:active { transform: none; }
+.rk-btn.rk-primary {
+  color: var(--accent-ink); background: var(--accent); border-color: transparent;
+  box-shadow: var(--shadow-sm);
+}
+.rk-btn.rk-ghost {
+  background: transparent; border-color: var(--glass-border); box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.rk-btn.rk-danger { color: #fff; background: var(--danger); border-color: transparent; }
+.rk-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; filter: none; }
 
 /* ============================================================
    Campos
    ============================================================ */
-.rk-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
-.rk-field label { font-family: var(--font-ui); font-weight: 700; font-size: 12px;
-  text-transform: uppercase; letter-spacing: .5px; color: var(--edge); }
+.rk-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.rk-field label { font-size: 13px; font-weight: 500; color: var(--ink-dim); }
 
 .rk-input, .rk-select {
-  font-family: var(--font-body); font-size: 15px; min-height: 44px;
-  padding: 10px 13px; border: var(--bord-sm); border-radius: var(--radius);
-  background: rgba(255,255,255,.8); color: var(--ink);
-  box-shadow: inset 3px 3px 0 rgba(10,23,18,.12);
+  font-family: var(--font); font-size: 15px; min-height: 44px;
+  padding: 11px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border); color: var(--ink);
+  background: var(--glass-2);
+  box-shadow: inset 0 1px 3px rgba(15, 30, 50, .07);
 }
-.rk-input::placeholder { color: #5a7488; }
+.rk-input::placeholder { color: var(--ink-dim); opacity: .7; }
 .rk-input:focus, .rk-select:focus {
-  outline: none; box-shadow: inset 0 0 0 rgba(0,0,0,0), var(--hard-sm);
-  background: #fff;
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 /* ============================================================
    Check / Toggle
    ============================================================ */
-.rk-check { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 10px; cursor: pointer; min-height: 30px; }
-.rk-check input { width: 20px; height: 20px; accent-color: var(--aqua); }
+.rk-check { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 12px; cursor: pointer; min-height: 28px; }
+.rk-check input { width: 18px; height: 18px; accent-color: var(--accent); }
 
-.rk-toggle { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; }
+.rk-toggle { position: relative; display: inline-flex; align-items: center; gap: 11px; cursor: pointer; font-size: 15px; }
 .rk-toggle input { position: absolute; opacity: 0; }
 .rk-toggle .track {
-  position: relative;
-  width: 52px; height: 28px; border: var(--bord-sm); border-radius: 999px; transition: background .15s ease;
-  background: #c3d2dd;
+  position: relative; width: 46px; height: 26px; border-radius: 999px;
+  background: rgba(120, 140, 160, .35); transition: background .2s ease;
+  box-shadow: inset 0 1px 3px rgba(15, 30, 50, .18);
 }
 .rk-toggle .track::before {
-  content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
-  border: var(--bord-sm); border-radius: 50%;
-  background: #fff; transition: transform .14s cubic-bezier(.3, 1.4, .5, 1);
+  content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-sm);
+  transition: transform .2s cubic-bezier(.3, 1.4, .5, 1);
 }
-.rk-toggle input:checked + .track { background: var(--aqua); }
-.rk-toggle input:checked + .track::before { transform: translateX(24px); }
-.rk-toggle input:focus-visible + .track { outline: 3px solid var(--amber); outline-offset: 2px; }
+.rk-toggle input:checked + .track { background: var(--accent); }
+.rk-toggle input:checked + .track::before { transform: translateX(20px); }
+.rk-toggle input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ============================================================
-   Progresso (líquido, mas emoldurado em preto)
+   Progresso
    ============================================================ */
 .rk-progress {
-  height: 26px; overflow: hidden; padding: 3px; border: var(--bord-sm); border-radius: var(--radius);
-  background: rgba(255,255,255,.6);
+  height: 8px; border-radius: 999px; overflow: hidden;
+  background: rgba(120, 140, 160, .25);
 }
 .rk-progress-bar {
-  height: 100%; width: 66%; border-radius: 1px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%),
-    linear-gradient(90deg, var(--aqua), var(--sky));
-  position: relative; overflow: hidden;
+  height: 100%; width: 66%; border-radius: 999px; background: var(--accent);
 }
-.rk-progress-bar::after {
-  content: ""; position: absolute; inset: 0;
-  background: repeating-linear-gradient(115deg, rgba(255,255,255,.4) 0 12px, transparent 12px 26px);
-  animation: flow 1s linear infinite;
-}
-@keyframes flow { to { transform: translateX(26px); } }
 
 /* --- Badge --- */
 .rk-badge {
-  display: inline-block; font-family: var(--font-ui); font-weight: 700; font-size: 11px;
-  text-transform: uppercase; letter-spacing: .5px; padding: 2px 9px; color: var(--edge);
-  background: var(--amber); border: var(--bord-sm); box-shadow: var(--hard-sm);
+  display: inline-block; font-size: 12px; font-weight: 600;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent);
 }
 
 /* --- Layout auxiliar --- */
-.rk-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.rk-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .rk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media (max-width: 640px) { .rk-grid { grid-template-columns: 1fr; } }
 
 /* ============================================================
-   Dock / Taskbar (vidro + moldura preta + sombra dura)
+   Dock / Taskbar — pílula de vidro
    ============================================================ */
 .rk-taskbar {
-  position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 5;
-  display: flex; align-items: center; gap: 11px; padding: 9px 13px;
-  border: var(--bord); border-radius: var(--radius);
-  background: var(--glass-strong);
-  -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
-  box-shadow: var(--hard);
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 5;
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: 999px; border: 1px solid var(--glass-border);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(1.3); backdrop-filter: blur(var(--blur)) saturate(1.3);
+  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-hi);
 }
 .rk-start {
-  display: flex; align-items: center; gap: 9px; font-family: var(--font-ui); font-weight: 700;
-  text-transform: uppercase; letter-spacing: .5px; font-size: 13px;
-  padding: 10px 16px; border: var(--bord-sm); border-radius: var(--radius);
-  color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(6,32,58,.6);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,0) 50%),
-    linear-gradient(180deg, #7ee07a, #2e9e4f);
-  box-shadow: var(--hard-sm);
-  transition: transform .06s ease, box-shadow .06s ease;
+  display: flex; align-items: center; gap: 9px; font-family: var(--font); font-weight: 600; font-size: 14px;
+  padding: 9px 18px; border-radius: 999px; border: none; cursor: pointer;
+  color: var(--accent-ink); background: var(--accent); box-shadow: var(--shadow-sm);
 }
-.rk-start:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--edge); }
-.rk-start .rk-orb { width: 15px; height: 15px; border: var(--bord-sm); background: var(--grass); }
-.rk-clock { font-family: var(--font-ui); font-weight: 700; font-size: 13px; color: var(--ink); padding: 0 8px; }
+.rk-start .rk-orb { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,.9); }
+.rk-clock { font-size: 14px; font-weight: 500; color: var(--ink-dim); padding: 0 8px; }
 
 /* ============================================================
-   Acessibilidade
+   Movimento reduzido
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .aero-bubbles { display: none; }
-  .rk-window, .rk-progress-bar::after, .rk-btn::after,
-  .rk-btn, .rk-start, .rk-ctl, .rk-toggle .track, .rk-toggle .track::before {
-    animation: none !important; transition: none !important;
-  }
-  .rk-btn:hover::after { left: -60%; }
+  .rk-btn, .rk-toggle .track, .rk-toggle .track::before { transition: none !important; }
 }

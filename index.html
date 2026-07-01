@@ -3,60 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RetroKit Aero Brut — vidro sobre concreto</title>
-  <meta name="description" content="RetroKit Aero Brut: colisão de vidro Aero (glossy, aqua) com brutalismo (borda preta grossa, sombra dura, mono)." />
+  <title>RetroKit Frost — glassmorphism minimalista</title>
+  <meta name="description" content="RetroKit Frost: a versão clean do sistema. Glassmorphism correto, paleta neutra branco/preto e um único token de marca." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Fundo Memphis: formas coloridas que brilham borradas através do vidro -->
-  <div class="memphis-bg" aria-hidden="true">
-    <svg width="150" height="150" style="top:6%;left:4%" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#ff5da2" stroke-width="10"/></svg>
-    <svg width="120" height="120" style="top:10%;right:8%;transform:rotate(15deg)" viewBox="0 0 100 100"><polygon points="50,8 92,88 8,88" fill="#9b5de5" stroke="#0a1712" stroke-width="6"/></svg>
-    <svg width="150" height="60" style="top:40%;left:2%;transform:rotate(-8deg)" viewBox="0 0 150 60"><polyline points="4,50 30,12 56,50 82,12 108,50 134,12" fill="none" stroke="#ff7a59" stroke-width="9" stroke-linecap="round"/></svg>
-    <svg width="140" height="70" style="top:34%;right:3%" viewBox="0 0 140 70"><path d="M6,40 Q30,4 54,40 T102,40 T150,40" fill="none" stroke="#23c3c0" stroke-width="9" stroke-linecap="round"/></svg>
-    <svg width="80" height="80" style="bottom:16%;left:8%;transform:rotate(12deg)" viewBox="0 0 80 80"><path d="M32,6 h16 v26 h26 v16 h-26 v26 h-16 v-26 h-26 v-16 h26 z" fill="#ffcf33" stroke="#0a1712" stroke-width="5"/></svg>
-    <svg width="110" height="60" style="bottom:24%;right:9%" viewBox="0 0 110 60"><path d="M5,58 A50,50 0 0 1 105,58 Z" fill="#7ed957" stroke="#0a1712" stroke-width="6"/></svg>
-    <svg width="90" height="90" style="bottom:8%;right:20%;transform:rotate(20deg)" viewBox="0 0 90 90"><g fill="#0a1712"><circle cx="15" cy="15" r="6"/><circle cx="45" cy="15" r="6"/><circle cx="75" cy="15" r="6"/><circle cx="15" cy="45" r="6"/><circle cx="45" cy="45" r="6"/><circle cx="75" cy="45" r="6"/><circle cx="15" cy="75" r="6"/><circle cx="45" cy="75" r="6"/><circle cx="75" cy="75" r="6"/></g></svg>
-    <svg width="70" height="70" style="top:66%;left:44%;transform:rotate(-14deg)" viewBox="0 0 70 70"><circle cx="35" cy="35" r="30" fill="#ff5da2" stroke="#0a1712" stroke-width="5"/></svg>
-  </div>
-
-  <!-- Confete flutuante (dots Memphis) -->
-  <div class="aero-bubbles" aria-hidden="true" id="bubbles"></div>
-
   <div class="rk-container">
     <header class="rk-hero">
-      <h1>RetroKit<br>Aero Brut</h1>
-      <p>Vidro sobre concreto sobre Memphis. As formas coloridas atrás brilham <strong>borradas</strong> através do vidro fosco — mas ganham contorno preto e sombra dura quando saltam pra cima. Clica num botão e ele afunda na própria sombra.</p>
+      <h1>RetroKit Frost</h1>
+      <p>A versão clean do sistema. Vidro de verdade — translúcido, com borda-de-luz e sombra difusa — sobre uma base neutra. A cor de marca é um único token: troque <code>--accent</code> e o sistema inteiro acompanha.</p>
     </header>
 
-    <!-- Janela + botões glossy -->
-    <div class="rk-eyebrow">01 · Vidro &amp; Botões</div>
+    <!-- Vidro + botões -->
+    <span class="rk-eyebrow">01 — Vidro &amp; botões</span>
     <div class="rk-window">
-      <svg class="rk-sticker tr" width="52" height="52" viewBox="0 0 52 52"><polygon points="26,4 48,48 4,48" fill="#ffcf33" stroke="#0a1712" stroke-width="4"/></svg>
-      <svg class="rk-sticker bl" width="76" height="34" viewBox="0 0 76 34"><path d="M4,24 Q18,2 32,24 T60,24 T88,24" fill="none" stroke="#ff5da2" stroke-width="7" stroke-linecap="round"/></svg>
       <div class="rk-titlebar">
         <span class="rk-dot"></span>
-        <span class="rk-title">Bem-vindo.exe</span>
+        <span class="rk-title">Bem-vindo</span>
         <div class="rk-window-controls">
-          <button class="rk-ctl" aria-label="Minimizar">_</button>
-          <button class="rk-ctl" aria-label="Maximizar">▢</button>
-          <button class="rk-ctl rk-close" aria-label="Fechar">✕</button>
+          <button class="rk-ctl" aria-label="Minimizar"></button>
+          <button class="rk-ctl" aria-label="Maximizar"></button>
+          <button class="rk-ctl rk-close" aria-label="Fechar"></button>
         </div>
       </div>
       <div class="rk-window-body">
-        <p>Vidro translúcido com <code>backdrop-filter</code>, flutuando sobre bloco preto com <code>box-shadow</code> dura, sobre um fundo Memphis. <span class="rk-badge">v0.4</span></p>
+        <p>Baixa opacidade, <code>backdrop-filter</code>, realce interno no topo e sombra suave. Os blobs de cor no fundo aparecem <strong>refratados</strong> através do vidro. <span class="rk-badge">v0.5</span></p>
         <div class="rk-row">
-          <button class="rk-btn rk-primary">OK</button>
-          <button class="rk-btn rk-grass">Aplicar</button>
-          <button class="rk-btn">Cancelar</button>
+          <button class="rk-btn rk-primary">Continuar</button>
+          <button class="rk-btn">Vidro</button>
+          <button class="rk-btn rk-ghost">Fantasma</button>
           <button class="rk-btn rk-danger">Excluir</button>
           <button class="rk-btn" disabled>Desativado</button>
         </div>
       </div>
     </div>
 
-    <!-- Formulário + progresso -->
-    <div class="rk-eyebrow">02 · Formulário &amp; feedback</div>
+    <!-- Formulário + feedback -->
+    <span class="rk-eyebrow">02 — Formulário &amp; feedback</span>
     <div class="rk-grid">
       <div class="rk-window">
         <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Preferências</span></div>
@@ -66,60 +49,45 @@
             <input class="rk-input" id="nome" placeholder="digite aqui..." />
           </div>
           <div class="rk-field">
-            <label for="tema">Papel de parede</label>
+            <label for="tema">Cor de marca</label>
             <select class="rk-select" id="tema">
-              <option>Horizonte Aqua</option>
-              <option>Céu &amp; Grama</option>
-              <option>Bolhas ao pôr do sol</option>
+              <option>Azul (padrão)</option>
+              <option>Neutro / mono</option>
+              <option>Personalizado</option>
             </select>
           </div>
           <label class="rk-check"><input type="checkbox" checked /> Lembrar de mim</label>
-          <label class="rk-toggle"><input type="checkbox" checked /><span class="track"></span> Bolhas flutuantes</label>
+          <label class="rk-toggle"><input type="checkbox" checked /><span class="track"></span> Modo compacto</label>
         </div>
       </div>
 
       <div class="rk-window">
-        <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Copiando arquivos...</span></div>
+        <div class="rk-titlebar"><span class="rk-dot"></span><span class="rk-title">Instalando</span></div>
         <div class="rk-window-body">
-          <p>Instalando componentes de vidro...</p>
-          <div class="rk-progress"><div class="rk-progress-bar"></div></div>
-          <div class="rk-row" style="margin-top:18px">
-            <button class="rk-btn rk-primary">Continuar</button>
-            <button class="rk-btn">Pausar</button>
+          <p>Copiando componentes...</p>
+          <div class="rk-panel">
+            <div class="rk-progress"><div class="rk-progress-bar"></div></div>
+            <div class="rk-row" style="margin-top:16px">
+              <button class="rk-btn rk-primary">Continuar</button>
+              <button class="rk-btn rk-ghost">Pausar</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Dock de vidro -->
+  <!-- Dock -->
   <div class="rk-taskbar">
-    <button class="rk-start"><span class="rk-orb"></span> Iniciar</button>
+    <button class="rk-start"><span class="rk-orb"></span> Início</button>
     <button class="rk-btn">RetroKit</button>
     <span class="rk-clock" id="clock">--:--</span>
   </div>
 
   <script>
-    // relógio
     const c = document.getElementById('clock');
     const tick = () => c.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     tick(); setInterval(tick, 10000);
-
-    // bolhas ambiente — geradas só se o usuário não pediu menos movimento
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const box = document.getElementById('bubbles');
-      const pop = ['#ff5da2', '#ff7a59', '#9b5de5', '#ffcf33', '#23c3c0', '#7ed957'];
-      for (let i = 0; i < 12; i++) {
-        const b = document.createElement('span');
-        const size = 10 + Math.random() * 26;
-        b.style.width = b.style.height = size + 'px';
-        b.style.left = Math.random() * 100 + '%';
-        b.style.background = pop[i % pop.length];
-        b.style.animationDuration = (9 + Math.random() * 12) + 's';
-        b.style.animationDelay = (-Math.random() * 15) + 's';
-        box.appendChild(b);
-      }
-    }
   </script>
 </body>
 </html>
